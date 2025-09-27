@@ -1,18 +1,16 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { specWorkflowGuideTool, specWorkflowGuideHandler } from './spec-workflow-guide.js';
 import { specStatusTool, specStatusHandler } from './spec-status.js';
-import { steeringGuideTool, steeringGuideHandler } from './steering-guide.js';
 import { approvalsTool, approvalsHandler } from './approvals.js';
 import { extractTestPerspectivesTool, extractTestPerspectivesHandler } from './extract-test-perspectives.js';
+import { qaWorkflowGuideTool, qaWorkflowGuideHandler } from './qa-workflow-guide.js';
 import { ToolContext, ToolResponse, MCPToolResponse, toMCPResponse } from '../types.js';
 
 export function registerTools(): Tool[] {
   return [
-    specWorkflowGuideTool,
-    steeringGuideTool,
     specStatusTool,
     approvalsTool,
-    extractTestPerspectivesTool
+    extractTestPerspectivesTool,
+    qaWorkflowGuideTool
   ];
 }
 
@@ -22,12 +20,6 @@ export async function handleToolCall(name: string, args: any, context: ToolConte
 
   try {
     switch (name) {
-      case 'spec-workflow-guide':
-        response = await specWorkflowGuideHandler(args, context);
-        break;
-      case 'steering-guide':
-        response = await steeringGuideHandler(args, context);
-        break;
       case 'spec-status':
         response = await specStatusHandler(args, context);
         break;
@@ -36,6 +28,9 @@ export async function handleToolCall(name: string, args: any, context: ToolConte
         break;
       case 'extract_test_perspectives':
         response = await extractTestPerspectivesHandler(args, context);
+        break;
+      case 'qa-workflow-guide':
+        response = await qaWorkflowGuideHandler(args, context);
         break;
       default:
         throw new Error(`Unknown tool: ${name}`);

@@ -1,38 +1,42 @@
-# Spec Workflow MCP
+# QA Workflow MCP
 
 [![npm version](https://img.shields.io/npm/v/@pimzino/spec-workflow-mcp)](https://www.npmjs.com/package/@pimzino/spec-workflow-mcp)
 [![VSCode Extension](https://badgen.net/vs-marketplace/v/Pimzino.spec-workflow-mcp)](https://marketplace.visualstudio.com/items?itemName=Pimzino.spec-workflow-mcp)
 
-A Model Context Protocol (MCP) server for structured spec-driven development with real-time dashboard and VSCode extension.
+A Model Context Protocol (MCP) server for QA engineers to extract test perspectives, design test cases, and manage testing workflows with AI assistance.
 
 ## ☕ Support This Project
 
 <a href="https://buymeacoffee.com/Pimzino" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
-## 📺 Showcase
+## 🎯 QA Workflow Overview
 
-### 🔄 Approval System in Action
-<a href="https://www.youtube.com/watch?v=C-uEa3mfxd0" target="_blank">
-  <img src="https://img.youtube.com/vi/C-uEa3mfxd0/maxresdefault.jpg" alt="Approval System Demo" width="600">
-</a>
+### **Test Perspective Extraction → Review → Test Case Design**
 
-*See how the approval system works: create documents, request approval through the dashboard, provide feedback, and track revisions.*
-
-### 📊 Dashboard & Spec Management
-<a href="https://www.youtube.com/watch?v=g9qfvjLUWf8" target="_blank">
-  <img src="https://img.youtube.com/vi/g9qfvjLUWf8/maxresdefault.jpg" alt="Dashboard Demo" width="600">
-</a>
-
-*Explore the real-time dashboard: view specs, track progress, navigate documents, and monitor your development workflow.*
+Transform requirements, design documents, and specifications into comprehensive test perspectives with AI-powered analysis.
 
 ## ✨ Key Features
 
-- **Structured Development Workflow** - Sequential spec creation (Requirements → Design → Tasks)
-- **Real-Time Web Dashboard** - Monitor specs, tasks, and progress with live updates
-- **VSCode Extension** - Integrated sidebar dashboard for VSCode users
-- **Approval Workflow** - Complete approval process with revisions
-- **Task Progress Tracking** - Visual progress bars and detailed status
-- **Multi-Language Support** - Available in 11 languages
+- **🔍 Test Perspective Extraction** - AI-powered analysis of requirements, design docs, and specifications
+- **📋 Structured Test Workflows** - Organize perspectives by functional, security, performance, and usability categories
+- **✅ Review & Approval System** - Collaborative review process with feedback and revision tracking
+- **📊 Real-Time QA Dashboard** - Monitor test perspective extraction and review progress
+- **🔄 Iterative Refinement** - Continuous improvement of test perspectives based on feedback
+- **🌍 Multi-Language Support** - Available in 11 languages including Japanese
+
+## 🧪 Current QA Tools
+
+### **Core Testing Tools**
+- **`extract_test_perspectives`** - Extract comprehensive test perspectives from documents
+- **`approvals`** - Review and approve test perspectives with team collaboration
+- **`spec-status`** - Track progress of test perspective extraction and review
+
+### **Document Analysis**
+- **Requirements Analysis** - Extract functional and non-functional test perspectives
+- **Design Document Analysis** - Identify integration points and architectural test needs
+- **API Specification Testing** - Generate API contract and security test perspectives
+- **UI/UX Testing** - Extract usability and accessibility test considerations
+- **Risk-Based Testing** - Analyze past issues and identify high-risk areas
 
 ## 🌍 Supported Languages
 
@@ -47,7 +51,7 @@ Add to your MCP configuration (see client-specific setup below):
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
     }
@@ -59,7 +63,7 @@ With auto-started dashboard:
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project", "--AutoStartDashboard"]
     }
@@ -80,48 +84,52 @@ Install [Spec Workflow MCP Extension](https://marketplace.visualstudio.com/items
 
 ## 📝 How to Use
 
-Simply mention spec-workflow in your conversation:
+Extract test perspectives from your project documents:
 
-- **"Create a spec for user authentication"** - Creates complete spec workflow
-- **"List my specs"** - Shows all specs and their status
-- **"Execute task 1.2 in spec user-auth"** - Runs a specific task
+- **"Extract test perspectives from requirements.md"** - Analyze requirements for test coverage
+- **"Review test perspectives for user authentication"** - Start collaborative review process
+- **"Show test perspective status"** - Check extraction and review progress
 
-[See more examples →](docs/PROMPTING-GUIDE.md)
+### Example Workflow
+
+```bash
+# 1. Extract test perspectives from multiple documents
+extract_test_perspectives projectPath:"/path/to/project" projectName:"UserAuth" inputDocuments:[
+  {filePath:"requirements.md", type:"requirements"},
+  {filePath:"api-spec.yaml", type:"api-spec"},
+  {filePath:"ui-wireframes.md", type:"ui-design"}
+]
+
+# 2. Request team review
+approvals action:"request" category:"test-perspective"
+  title:"UserAuth Test Perspectives Review"
+  filePath:"test-perspectives/extracted/UserAuth.md"
+
+# 3. Check review status
+approvals action:"status" approvalId:"[generated-id]"
+
+# 4. View overall progress
+spec-status projectPath:"/path/to/project" specName:"UserAuth"
+```
 
 ## 🔧 MCP Client Setup
-
-<details>
-<summary><strong>Augment Code</strong></summary>
-
-Configure in your Augment settings:
-```json
-{
-  "mcpServers": {
-    "spec-workflow": {
-      "command": "npx",
-      "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
-    }
-  }
-}
-```
-</details>
 
 <details>
 <summary><strong>Claude Code CLI</strong></summary>
 
 Add to your MCP configuration:
 ```bash
-claude mcp add spec-workflow npx @pimzino/spec-workflow-mcp@latest -- /path/to/your/project
+claude mcp add qa-workflow npx @pimzino/spec-workflow-mcp@latest -- /path/to/your/project
 ```
 
 **Important Notes:**
 - The `-y` flag bypasses npm prompts for smoother installation
-- The `--` separator ensures the path is passed to the spec-workflow script, not to npx
+- The `--` separator ensures the path is passed to the script, not to npx
 - Replace `/path/to/your/project` with your actual project directory path
 
 **Alternative for Windows (if the above doesn't work):**
 ```bash
-claude mcp add spec-workflow cmd.exe /c "npx @pimzino/spec-workflow-mcp@latest /path/to/your/project"
+claude mcp add qa-workflow cmd.exe /c "npx @pimzino/spec-workflow-mcp@latest /path/to/your/project"
 ```
 </details>
 
@@ -132,7 +140,7 @@ Add to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
     }
@@ -144,7 +152,7 @@ Or with auto-started dashboard:
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project", "--AutoStartDashboard"]
     }
@@ -160,7 +168,7 @@ Add to your MCP server configuration:
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
     }
@@ -176,7 +184,7 @@ Add to your Continue configuration:
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
     }
@@ -192,7 +200,7 @@ Add to your Cursor settings (`settings.json`):
 ```json
 {
   "mcpServers": {
-    "spec-workflow": {
+    "qa-workflow": {
       "command": "npx",
       "args": ["-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"]
     }
@@ -201,63 +209,82 @@ Add to your Cursor settings (`settings.json`):
 ```
 </details>
 
-<details>
-<summary><strong>OpenCode</strong></summary>
-
-Add to your `opencode.json` configuration file:
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "spec-workflow": {
-      "type": "local",
-      "command": ["npx", "-y", "@pimzino/spec-workflow-mcp@latest", "/path/to/your/project"],
-      "enabled": true
-    }
-  }
-}
-```
-</details>
-
 ## 📚 Documentation
 
-- [Configuration Guide](docs/CONFIGURATION.md) - Command-line options, config files
-- [User Guide](docs/USER-GUIDE.md) - Comprehensive usage examples
-- [Workflow Process](docs/WORKFLOW.md) - Development workflow and best practices
-- [Interfaces Guide](docs/INTERFACES.md) - Dashboard and VSCode extension details
-- [Prompting Guide](docs/PROMPTING-GUIDE.md) - Advanced prompting examples
-- [Tools Reference](docs/TOOLS-REFERENCE.md) - Complete tools documentation
-- [Development](docs/DEVELOPMENT.md) - Contributing and development setup
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [Test Perspective Workflow](TEST_PERSPECTIVE_WORKFLOW.md) - Detailed workflow guide
+- [QA Migration Plan](QA_WORKFLOW_MIGRATION_PLAN.md) - Complete migration design
+- [Implementation Tasks](QA_WORKFLOW_IMPLEMENTATION_TASKS.md) - Development roadmap
 
 ## 📁 Project Structure
 
 ```
 your-project/
   .spec-workflow/
-    approvals/
-    archive/
-    specs/
-    steering/
-    templates/
-    user-templates/
-    config.example.toml
+    test-perspectives/
+      extracted/          # AI-extracted test perspectives
+      approved/           # Reviewed and approved perspectives
+    approvals/            # Review workflow management
+    templates/            # QA-specific templates
+    config.toml          # QA workflow configuration
 ```
 
 ## 🛠️ Development
 
+Built with modern tools for fast development:
+
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Build the project
-npm run build
+bun run build
 
 # Run in development mode
-npm run dev
+bun run dev
+
+# Run with dashboard
+bun run dev . --dashboard
 ```
 
-[See development guide →](docs/DEVELOPMENT.md)
+## 🎯 QA Workflow Benefits
+
+### **For QA Engineers**
+- **Comprehensive Coverage** - AI identifies test perspectives you might miss
+- **Structured Approach** - Organize testing by categories and priorities
+- **Team Collaboration** - Built-in review and approval workflow
+- **Documentation** - Auto-generated test perspective documentation
+
+### **For QA Teams**
+- **Consistency** - Standardized test perspective extraction process
+- **Knowledge Sharing** - Review system captures team expertise
+- **Progress Tracking** - Visual dashboards for workflow monitoring
+- **Quality Assurance** - Multi-stage review before test case creation
+
+### **For Projects**
+- **Early Testing** - Identify test needs during requirements phase
+- **Risk Mitigation** - AI-powered risk analysis and test prioritization
+- **Efficiency** - Reduce time from requirements to test design
+- **Traceability** - Link test perspectives back to source documents
+
+## 🔄 Roadmap
+
+### **Current (v1.0)**
+- ✅ Test perspective extraction from documents
+- ✅ Review and approval workflow
+- ✅ Real-time dashboard
+- ✅ Multi-document analysis
+
+### **Next (v1.1)**
+- 🔄 Test case generation from perspectives
+- 🔄 Test execution tracking
+- 🔄 Integration with test management tools
+- 🔄 Advanced risk analysis
+
+### **Future (v2.0)**
+- 📋 Test automation script generation
+- 📋 CI/CD integration
+- 📋 Advanced analytics and reporting
+- 📋 ML-powered test optimization
 
 ## 📄 License
 
@@ -272,3 +299,7 @@ GPL-3.0
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Pimzino/spec-workflow-mcp&type=Date" />
  </picture>
 </a>
+
+---
+
+**Transform your testing workflow with AI-powered test perspective extraction and collaborative review processes.**

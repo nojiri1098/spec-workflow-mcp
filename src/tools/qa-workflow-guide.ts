@@ -60,7 +60,7 @@ flowchart TD
     CheckDocs -->|いいえ| P1_Prepare[文書の準備を支援]
 
     %% フェーズ1: テスト観点抽出
-    P1_Prepare --> P1_Extract[extract_test_perspectives<br/>複数文書分析]
+    P1_Prepare --> P1_Extract[extract_test_aspects<br/>複数文書分析]
     P1_Extract --> P1_Review[テスト観点レビュー]
     P1_Review --> P1_Approve[approvals<br/>action: request]
     P1_Approve --> P1_Status[approvals<br/>action: status]
@@ -88,7 +88,7 @@ flowchart TD
 **目的**: 様々な文書からテスト観点を体系的に抽出し、テストの網羅性を確保する。
 
 **使用ツール**:
-- extract_test_perspectives: 文書からテスト観点を抽出
+- extract_test_aspects: 文書からテスト観点を抽出
 - approvals: レビューと承認プロセスの管理
 - spec-status: 進捗状況の確認
 
@@ -99,7 +99,7 @@ flowchart TD
 
 2. **テスト観点の抽出**
    \`\`\`
-   extract_test_perspectives
+   extract_test_aspects
    projectPath: "/path/to/project"
    projectName: "project-name"
    inputDocuments: [
@@ -117,9 +117,9 @@ flowchart TD
 4. **レビュープロセス**
    \`\`\`
    approvals action: "request"
-   category: "test-perspective"
+   category: "test-aspect"
    title: "プロジェクト名 テスト観点レビュー"
-   filePath: "test-perspectives/extracted/ProjectName.md"
+   filePath: "test-aspects/extracted/ProjectName.md"
    \`\`\`
 
 5. **承認状況の確認**
@@ -208,12 +208,12 @@ flowchart TD
 ## 実用的なテンプレートとサンプル
 
 ### 利用可能なテンプレート
-1. **test-perspectives-template.md** - 基本テンプレート
-2. **test-perspectives-example.md** - 実際のサンプル（ユーザー認証機能）
+1. **test-aspects-template.md** - 基本テンプレート
+2. **test-aspects-example.md** - 実際のサンプル（ユーザー認証機能）
 3. **review-checklist.md** - レビュー用チェックリスト
 
 ### サンプルの活用方法
-- **初回作成時**: test-perspectives-example.md を参考に具体的な記述方法を学習
+- **初回作成時**: test-aspects-example.md を参考に具体的な記述方法を学習
 - **レビュー時**: review-checklist.md を使用して体系的な品質確認
 - **継続改善**: 実プロジェクトでの使用経験をテンプレートにフィードバック
 

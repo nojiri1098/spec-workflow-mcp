@@ -1,7 +1,7 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { specStatusTool, specStatusHandler } from './spec-status.js';
 import { approvalsTool, approvalsHandler } from './approvals.js';
-import { extractTestPerspectivesTool, extractTestPerspectivesHandler } from './extract-test-perspectives.js';
+import { extractTestAspectsTool, extractTestAspectsHandler } from './extract-test-aspects.js';
 import { qaWorkflowGuideTool, qaWorkflowGuideHandler } from './qa-workflow-guide.js';
 import { ToolContext, ToolResponse, MCPToolResponse, toMCPResponse } from '../types.js';
 
@@ -9,7 +9,7 @@ export function registerTools(): Tool[] {
   return [
     specStatusTool,
     approvalsTool,
-    extractTestPerspectivesTool,
+    extractTestAspectsTool,
     qaWorkflowGuideTool
   ];
 }
@@ -26,8 +26,8 @@ export async function handleToolCall(name: string, args: any, context: ToolConte
       case 'approvals':
         response = await approvalsHandler(args, context);
         break;
-      case 'extract_test_perspectives':
-        response = await extractTestPerspectivesHandler(args, context);
+      case 'extract_test_aspects':
+        response = await extractTestAspectsHandler(args, context);
         break;
       case 'qa-workflow-guide':
         response = await qaWorkflowGuideHandler(args, context);

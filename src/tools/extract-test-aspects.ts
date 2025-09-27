@@ -1,16 +1,16 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { ToolContext, ToolResponse, TestPerspective, TestPerspectiveProject, InputDocument } from '../types.js';
+import { ToolContext, ToolResponse, TestAspect, TestAspectProject, InputDocument } from '../types.js';
 import { validateProjectPath } from '../core/path-utils.js';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-export const extractTestPerspectivesTool: Tool = {
-  name: 'extract_test_perspectives',
-  description: `Extract comprehensive test perspectives from requirement documents, design specs, and other inputs.
+export const extractTestAspectsTool: Tool = {
+  name: 'extract_test_aspects',
+  description: `Extract comprehensive test aspects from requirement documents, design specs, and other inputs.
 
 # Instructions
-Analyze provided documents and extract comprehensive test perspectives covering:
+Analyze provided documents and extract comprehensive test aspects covering:
 - Functional testing angles from requirements and features
 - Non-functional requirements (performance, security, usability)
 - Edge cases and error conditions
@@ -19,9 +19,9 @@ Analyze provided documents and extract comprehensive test perspectives covering:
 - Data validation and boundary testing
 - Security vulnerabilities and access controls
 
-Generate structured test perspectives that can guide comprehensive test case design.
+Generate structured test aspects that can guide comprehensive test case design.
 
-IMPORTANT: Only analyze files that exist and are accessible. Generate practical, actionable test perspectives.`,
+IMPORTANT: Only analyze files that exist and are accessible. Generate practical, actionable test aspects.`,
   inputSchema: {
     type: 'object',
     properties: {
@@ -31,7 +31,7 @@ IMPORTANT: Only analyze files that exist and are accessible. Generate practical,
       },
       projectName: {
         type: 'string',
-        description: 'Name of the project for test perspective extraction'
+        description: 'Name of the project for test aspect extraction'
       },
       inputDocuments: {
         type: 'array',
@@ -54,7 +54,7 @@ IMPORTANT: Only analyze files that exist and are accessible. Generate practical,
           },
           required: ['filePath', 'type']
         },
-        description: 'List of input documents to analyze for test perspectives'
+        description: 'List of input documents to analyze for test aspects'
       },
       focusAreas: {
         type: 'array',
@@ -66,7 +66,7 @@ IMPORTANT: Only analyze files that exist and are accessible. Generate practical,
   }
 };
 
-export async function extractTestPerspectivesHandler(
+export async function extractTestAspectsHandler(
   args: {
     projectPath: string;
     projectName: string;
@@ -79,12 +79,12 @@ export async function extractTestPerspectivesHandler(
     // Validate project path
     const validatedProjectPath = await validateProjectPath(args.projectPath);
 
-    // Ensure test-perspectives directory exists
-    const testPerspectivesDir = join(validatedProjectPath, '.spec-workflow', 'test-perspectives');
-    const extractedDir = join(testPerspectivesDir, 'extracted');
+    // Ensure test-aspects directory exists
+    const testAspectsDir = join(validatedProjectPath, '.spec-workflow', 'test-aspects');
+    const extractedDir = join(testAspectsDir, 'extracted');
 
-    if (!existsSync(testPerspectivesDir)) {
-      mkdirSync(testPerspectivesDir, { recursive: true });
+    if (!existsSync(testAspectsDir)) {
+      mkdirSync(testAspectsDir, { recursive: true });
     }
     if (!existsSync(extractedDir)) {
       mkdirSync(extractedDir, { recursive: true });
@@ -123,38 +123,38 @@ export async function extractTestPerspectivesHandler(
       };
     }
 
-    // Generate test perspectives using LLM analysis
-    const perspectives = await generateTestPerspectives(
+    // Generate test aspects using LLM analysis
+    const aspects = await generateTestAspects(
       documentContents,
       args.projectName,
       args.focusAreas || []
     );
 
-    // Create test perspective project
-    const testPerspectiveProject: TestPerspectiveProject = {
+    // Create test aspect project
+    const testAspectProject: TestAspectProject = {
       projectName: args.projectName,
       createdAt: new Date().toISOString(),
       lastModified: new Date().toISOString(),
-      perspectives,
+      aspects,
       status: 'extracted'
     };
 
     // Save to file
     const outputPath = join(extractedDir, `${args.projectName}.md`);
-    const markdownContent = generateMarkdownReport(testPerspectiveProject, documentContents, missingFiles);
+    const markdownContent = generateMarkdownReport(testAspectProject, documentContents, missingFiles);
 
     writeFileSync(outputPath, markdownContent, 'utf-8');
 
     return {
       success: true,
-      message: `Successfully extracted ${perspectives.length} test perspectives for ${args.projectName}`,
+      message: `Successfully extracted ${aspects.length} test aspects for ${args.projectName}`,
       data: {
         projectName: args.projectName,
-        perspectivesCount: perspectives.length,
+        aspectsCount: aspects.length,
         outputPath: outputPath.replace(validatedProjectPath, '.'),
         processedDocuments: documentContents.length,
         skippedDocuments: missingFiles.length,
-        perspectives: perspectives.map(p => ({
+        aspects: aspects.map(p => ({
           id: p.id,
           title: p.title,
           category: p.category,
@@ -162,9 +162,9 @@ export async function extractTestPerspectivesHandler(
         }))
       },
       nextSteps: [
-        `Review extracted perspectives: ${outputPath.replace(validatedProjectPath, '.')}`,
-        'Request approval for review: approvals action:"request" category:"test-perspective"',
-        `Use dashboard to review detailed perspectives: ${context.dashboardUrl || 'Start dashboard or use VS Code extension'}`,
+        `Review extracted aspects: ${outputPath.replace(validatedProjectPath, '.')}`,
+        'Request approval for review: approvals action:"request" category:"test-aspect"',
+        `Use dashboard to review detailed aspects: ${context.dashboardUrl || 'Start dashboard or use VS Code extension'}`,
         ...(missingFiles.length > 0 ? [`Note: ${missingFiles.length} files were skipped: ${missingFiles.join(', ')}`] : [])
       ],
       projectContext: {
@@ -178,7 +178,7 @@ export async function extractTestPerspectivesHandler(
     const errorMessage = error instanceof Error ? error.message : String(error);
     return {
       success: false,
-      message: `Failed to extract test perspectives: ${errorMessage}`,
+      message: `Failed to extract test aspects: ${errorMessage}`,
       nextSteps: [
         'Check project path exists',
         'Verify document file paths',
@@ -188,60 +188,60 @@ export async function extractTestPerspectivesHandler(
   }
 }
 
-async function generateTestPerspectives(
+async function generateTestAspects(
   documentContents: { document: InputDocument; content: string }[],
   projectName: string,
   focusAreas: string[]
-): Promise<TestPerspective[]> {
-  const perspectives: TestPerspective[] = [];
+): Promise<TestAspect[]> {
+  const aspects: TestAspect[] = [];
 
-  // Analyze each document and extract perspectives
+  // Analyze each document and extract aspects
   for (const { document, content } of documentContents) {
-    const documentPerspectives = await analyzeDocumentForPerspectives(document, content, focusAreas);
-    perspectives.push(...documentPerspectives);
+    const documentAspects = await analyzeDocumentForAspects(document, content, focusAreas);
+    aspects.push(...documentAspects);
   }
 
-  // Add cross-cutting perspectives
-  const crossCuttingPerspectives = generateCrossCuttingPerspectives(projectName, documentContents, focusAreas);
-  perspectives.push(...crossCuttingPerspectives);
+  // Add cross-cutting aspects
+  const crossCuttingAspects = generateCrossCuttingAspects(projectName, documentContents, focusAreas);
+  aspects.push(...crossCuttingAspects);
 
-  return perspectives;
+  return aspects;
 }
 
-async function analyzeDocumentForPerspectives(
+async function analyzeDocumentForAspects(
   document: InputDocument,
   content: string,
   focusAreas: string[]
-): Promise<TestPerspective[]> {
-  const perspectives: TestPerspective[] = [];
+): Promise<TestAspect[]> {
+  const aspects: TestAspect[] = [];
 
   // Extract key information based on document type
   switch (document.type) {
     case 'requirements':
-      perspectives.push(...extractRequirementsPerspectives(document, content, focusAreas));
+      aspects.push(...extractRequirementsAspects(document, content, focusAreas));
       break;
     case 'design':
-      perspectives.push(...extractDesignPerspectives(document, content, focusAreas));
+      aspects.push(...extractDesignAspects(document, content, focusAreas));
       break;
     case 'api-spec':
-      perspectives.push(...extractAPISpecPerspectives(document, content, focusAreas));
+      aspects.push(...extractAPISpecAspects(document, content, focusAreas));
       break;
     case 'ui-design':
-      perspectives.push(...extractUIDesignPerspectives(document, content, focusAreas));
+      aspects.push(...extractUIDesignAspects(document, content, focusAreas));
       break;
     case 'user-story':
-      perspectives.push(...extractUserStoryPerspectives(document, content, focusAreas));
+      aspects.push(...extractUserStoryAspects(document, content, focusAreas));
       break;
   }
 
-  return perspectives;
+  return aspects;
 }
 
-function extractRequirementsPerspectives(document: InputDocument, content: string, focusAreas: string[]): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+function extractRequirementsAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // Functional requirements testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Functional Requirements Validation',
     description: 'Verify all functional requirements are implemented correctly according to specifications',
@@ -264,7 +264,7 @@ function extractRequirementsPerspectives(document: InputDocument, content: strin
   });
 
   // Input validation testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Input Validation and Data Integrity',
     description: 'Test data validation, sanitization, and boundary conditions for all inputs',
@@ -286,14 +286,14 @@ function extractRequirementsPerspectives(document: InputDocument, content: strin
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
-function extractDesignPerspectives(document: InputDocument, content: string, focusAreas: string[]): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+function extractDesignAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // Integration testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Component Integration Testing',
     description: 'Test interactions between system components as defined in design',
@@ -316,7 +316,7 @@ function extractDesignPerspectives(document: InputDocument, content: string, foc
   });
 
   // Performance considerations
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Performance and Scalability Validation',
     description: 'Verify system meets performance requirements under various load conditions',
@@ -338,14 +338,14 @@ function extractDesignPerspectives(document: InputDocument, content: string, foc
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
-function extractAPISpecPerspectives(document: InputDocument, content: string, focusAreas: string[]): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+function extractAPISpecAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // API contract testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'API Contract and Schema Validation',
     description: 'Test API endpoints conform to specified contracts, schemas, and behavior',
@@ -368,7 +368,7 @@ function extractAPISpecPerspectives(document: InputDocument, content: string, fo
   });
 
   // API security testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'API Security and Access Control',
     description: 'Verify API security measures, authentication, and authorization mechanisms',
@@ -390,14 +390,14 @@ function extractAPISpecPerspectives(document: InputDocument, content: string, fo
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
-function extractUIDesignPerspectives(document: InputDocument, content: string, focusAreas: string[]): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+function extractUIDesignAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // Usability testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'User Interface and Experience Validation',
     description: 'Test UI design implementation and user experience flows',
@@ -419,14 +419,14 @@ function extractUIDesignPerspectives(document: InputDocument, content: string, f
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
-function extractUserStoryPerspectives(document: InputDocument, content: string, focusAreas: string[]): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+function extractUserStoryAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // User journey testing
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'User Journey and Workflow Validation',
     description: 'Test complete user workflows and story acceptance criteria',
@@ -448,18 +448,18 @@ function extractUserStoryPerspectives(document: InputDocument, content: string, 
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
-function generateCrossCuttingPerspectives(
+function generateCrossCuttingAspects(
   projectName: string,
   documentContents: { document: InputDocument; content: string }[],
   focusAreas: string[]
-): TestPerspective[] {
-  const perspectives: TestPerspective[] = [];
+): TestAspect[] {
+  const aspects: TestAspect[] = [];
 
   // Error handling and recovery
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Error Handling and System Recovery',
     description: 'Test system behavior under error conditions and recovery mechanisms',
@@ -482,7 +482,7 @@ function generateCrossCuttingPerspectives(
   });
 
   // Security considerations
-  perspectives.push({
+  aspects.push({
     id: uuidv4(),
     title: 'Security and Data Protection',
     description: 'Comprehensive security testing across all system components',
@@ -504,21 +504,21 @@ function generateCrossCuttingPerspectives(
     ]
   });
 
-  return perspectives;
+  return aspects;
 }
 
 function generateMarkdownReport(
-  project: TestPerspectiveProject,
+  project: TestAspectProject,
   documentContents: { document: InputDocument; content: string }[],
   missingFiles: string[]
 ): string {
-  const markdown = `# Test Perspectives: ${project.projectName}
+  const markdown = `# Test Aspects: ${project.projectName}
 
 ## Extraction Summary
 - **Project**: ${project.projectName}
 - **Extraction Date**: ${new Date(project.createdAt).toLocaleDateString()}
 - **Status**: ${project.status}
-- **Total Perspectives**: ${project.perspectives.length}
+- **Total Aspects**: ${project.aspects.length}
 - **Processed Documents**: ${documentContents.length}
 ${missingFiles.length > 0 ? `- **Skipped Documents**: ${missingFiles.length}` : ''}
 
@@ -528,38 +528,38 @@ ${documentContents.map(doc => `- **${doc.document.type}**: ${doc.document.filePa
 ${missingFiles.length > 0 ? `## Skipped Documents
 ${missingFiles.map(file => `- ${file}`).join('\n')}
 
-` : ''}## Extracted Test Perspectives
+` : ''}## Extracted Test Aspects
 
-${project.perspectives.map((perspective, index) => `### ${perspective.category.toUpperCase()}-${String(index + 1).padStart(3, '0')}: ${perspective.title}
+${project.aspects.map((aspect, index) => `### ${aspect.category.toUpperCase()}-${String(index + 1).padStart(3, '0')}: ${aspect.title}
 
-- **Category**: ${perspective.category.charAt(0).toUpperCase() + perspective.category.slice(1)}
-- **Priority**: ${perspective.priority.charAt(0).toUpperCase() + perspective.priority.slice(1)}
-- **Source**: ${perspective.source}
-- **Extracted From**: ${perspective.extractedFrom}
+- **Category**: ${aspect.category.charAt(0).toUpperCase() + aspect.category.slice(1)}
+- **Priority**: ${aspect.priority.charAt(0).toUpperCase() + aspect.priority.slice(1)}
+- **Source**: ${aspect.source}
+- **Extracted From**: ${aspect.extractedFrom}
 
-**Description**: ${perspective.description}
+**Description**: ${aspect.description}
 
-**Rationale**: ${perspective.rationale}
+**Rationale**: ${aspect.rationale}
 
 **Test Conditions**:
-${perspective.testConditions.map(condition => `- ${condition}`).join('\n')}
+${aspect.testConditions.map(condition => `- ${condition}`).join('\n')}
 
 **Associated Risks**:
-${perspective.risks.map(risk => `- ${risk}`).join('\n')}
+${aspect.risks.map(risk => `- ${risk}`).join('\n')}
 
 ---
 `).join('\n')}
 
 ## Next Steps
 
-1. **Review** each test perspective for completeness and accuracy
-2. **Request approval** via dashboard or use: \`approvals action:"request" category:"test-perspective"\`
-3. **Refine** perspectives based on review feedback
+1. **Review** each test aspect for completeness and accuracy
+2. **Request approval** via dashboard or use: \`approvals action:"request" category:"test-aspect"\`
+3. **Refine** aspects based on review feedback
 4. **Proceed** to test case design once approved
 
 ---
 
-*Generated by extract_test_perspectives tool at ${new Date().toISOString()}*
+*Generated by extract_test_aspects tool at ${new Date().toISOString()}*
 `;
 
   return markdown;

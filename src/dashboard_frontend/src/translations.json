@@ -4,8 +4,8 @@
   "projectDescription": "品質保証ワークフローダッシュボード",
   "nav": {
     "statistics": "統計",
-    "steering": "ステアリング",
-    "specs": "仕様書",
+    "steering": "事前知識",
+    "testAspects": "テスト観点",
     "tasks": "タスク",
     "approvals": "承認"
   },
@@ -17,10 +17,6 @@
     "toggle": "テーマの切り替え",
     "dark": "ダーク",
     "light": "ライト"
-  },
-  "support": {
-    "me": "サポートする",
-    "project": "プロジェクトをサポート"
   },
   "mobile": {
     "menu": "メニュー",
@@ -44,14 +40,6 @@
       "awaiting": "レビュー待ち",
       "allClear": "すべてクリア"
     }
-  },
-  "comingSoon": {
-    "title": "その他の機能は近日公開予定",
-    "description": "開発ワークフローのための追加の分析とインサイトに取り組んでいます。更新をお楽しみに！"
-  },
-  "links": {
-    "npm": "npm パッケージ",
-    "github": "GitHub"
   },
   "editor": {
     "markdown": {
@@ -96,17 +84,17 @@
       "title": "タスク管理",
       "subtitle": {
         "selected": "タスクの進捗を管理・追跡",
-        "unselected": "仕様を選択してタスクを表示・管理します"
+        "unselected": "テスト観点を選択してタスクを表示・管理します"
       }
     },
     "dropdown": {
-      "selectPlaceholder": "仕様を選択...",
+      "selectPlaceholder": "テスト観点を選択...",
       "completedOutOfTotal": "{{completed}} / {{total}} 件のタスクが完了",
       "completedOutOfTotalShort": "{{completed}} / {{total}} タスク"
     },
     "search": {
-      "placeholder": "仕様を検索...",
-      "noSpecsFound": "仕様が見つかりません",
+      "placeholder": "テスト観点を検索...",
+      "noSpecsFound": "テスト観点が見つかりません",
       "tryAdjusting": "検索条件を変更してみてください"
     },
     "loading": "タスク進捗を読み込み中…",
@@ -118,13 +106,13 @@
     },
     "files": { "label": "ファイル:" },
     "implementation": { "label": "実装:" },
-    "labels": { "spec": "仕様:" },
+    "labels": { "spec": "テスト観点:" },
     "taskDetails": "タスクの詳細",
     "status": "ステータス",
     "noTasksFound": "タスクが見つかりません",
     "showAllTasks": "すべてのタスクを表示",
     "noTasksWithStatus": "ステータス「{{status}}」のタスクが見つかりません。",
-    "noTasksAvailable": "この仕様にはタスクがありません",
+    "noTasksAvailable": "このテスト観点にはタスクがありません",
     "showingTasksWithStatus": "ステータス「{{status}}」の{{count}}件のタスクを表示中",
     "filters": {
       "all": "すべて",
@@ -160,9 +148,9 @@
       "clickToChange": "クリックしてステータスを変更"
     },
     "noSpecsFound": {
-      "title": "スペックが見つかりません",
-      "noMatch": "\"{{query}}\" に一致するスペックがありません",
-      "noSpecsAvailable": "タスクを管理するための仕様がありません。"
+      "title": "テスト観点が見つかりません",
+      "noMatch": "\"{{query}}\" に一致するテスト観点がありません",
+      "noSpecsAvailable": "タスクを管理するためのテスト観点がありません。"
     },
     "copyFailed": {
       "title": "コピーに失敗しました",
@@ -191,25 +179,26 @@
       "progressDesc": "完了率"
     }
   },
-  "specsPage": {
+  "testAspectsPage": {
     "header": {
-      "title": "仕様書",
+      "title": "テスト観点",
       "subtitle": {
-        "active": "アクティブな要件・設計・タスク文書を表示・管理",
-        "archived": "アーカイブされた仕様書を表示"
+        "active": "QAワークフローに必要な要件・設計・タスク・テスト観点の文書を表示・管理",
+        "archived": "アーカイブされたテスト観点を表示"
       }
     },
     "modal": {
       "archivedBadge": "アーカイブ",
-      "archivedNotice": "アーカイブされた仕様（編集可能）",
-      "closeAria": "仕様ビューアを閉じる",
+      "archivedNotice": "アーカイブされたテスト観点（編集可能）",
+      "closeAria": "テスト観点ビューアを閉じる",
       "docLabel": "ドキュメント:",
       "docSelectAria": "ドキュメント種類を選択"
     },
     "documents": {
-      "requirements": "要件",
-      "design": "設計",
-      "tasks": "タスク"
+      "requirements": "要件定義",
+      "design": "設計書",
+      "tasks": "タスク一覧",
+      "testAspects": "テスト観点"
     },
     "table": {
       "name": "名前",
@@ -230,14 +219,14 @@
     "noTasks": "タスクなし",
     "search": {
       "placeholder": {
-        "active": "アクティブな仕様を検索...",
-        "archived": "アーカイブ済み仕様を検索..."
+        "active": "アクティブなテスト観点を検索...",
+        "archived": "アーカイブ済みテスト観点を検索..."
       }
     },
     "empty": {
       "title": "ドキュメントはありません",
-      "description": "この仕様にはまだドキュメントが作成されていません。",
-      "noResults": "仕様が見つかりません",
+      "description": "このテスト観点にはまだドキュメントが作成されていません。",
+      "noResults": "テスト観点が見つかりません",
       "noResultsDescription": "検索条件やフィルターを調整してください"
     },
     "tabs": {
@@ -247,8 +236,8 @@
   },
   "steeringPage": {
     "header": {
-      "title": "ステアリング文書",
-      "subtitle": "プロダクト方針・技術アーキテクチャ・組織構造に関するプロジェクトのステアリング文書を表示・管理"
+      "title": "事前知識",
+      "subtitle": "テスト観点抽出に必要なプロダクト方針・技術アーキテクチャ・組織構造などの事前知識を表示・管理"
     },
     "table": {
       "document": "ドキュメント",
@@ -261,15 +250,15 @@
       "notCreated": "未作成"
     },
     "modal": {
-      "title": "{{name}} ステアリング文書",
-      "closeAria": "ステアリング文書を閉じる"
+      "title": "{{name}} 事前知識",
+      "closeAria": "事前知識を閉じる"
     },
     "controls": {
       "documentLabel": "ドキュメント:"
     },
     "empty": {
-      "title": "ステアリング文書がありません",
-      "description": "ステアリング文書はプロジェクトの文脈と指針を提供します。上の任意の文書をクリックして作成または表示します。"
+      "title": "事前知識がありません",
+      "description": "事前知識はテスト観点抽出に必要なプロジェクトの文脈と指針を提供します。上の任意の文書をクリックして作成または表示します。"
     }
   },
   "approvals": {
@@ -363,7 +352,7 @@
       "label": "フィルター:",
       "options": {
         "all": "すべてのドキュメント",
-        "steering": "ステアリング文書"
+        "steering": "事前知識"
       }
     },
     "empty": {

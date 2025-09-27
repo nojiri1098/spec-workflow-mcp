@@ -84,8 +84,8 @@ export interface MCPToolResponse {
   _meta?: Record<string, any>;
 }
 
-// Test Perspective types
-export interface TestPerspective {
+// Test Aspect types
+export interface TestAspect {
   id: string;
   title: string;
   description: string;
@@ -98,11 +98,11 @@ export interface TestPerspective {
   risks: string[]; // 関連するリスク
 }
 
-export interface TestPerspectiveProject {
+export interface TestAspectProject {
   projectName: string;
   createdAt: string;
   lastModified: string;
-  perspectives: TestPerspective[];
+  aspects: TestAspect[];
   status: 'extracted' | 'under-review' | 'approved' | 'needs-revision';
 }
 

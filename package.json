@@ -13,18 +13,18 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run validate:i18n && npm run clean && tsc && npm run build:dashboard && npm run copy-static",
-    "copy-static": "node scripts/copy-static.cjs",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "dev:dashboard": "vite --config src/dashboard_frontend/vite.config.ts",
-    "build:dashboard": "vite build --config src/dashboard_frontend/vite.config.ts",
-    "clean": "rimraf dist",
-    "validate:i18n": "node scripts/validate-i18n.js",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
-    "prepublishOnly": "npm run build"
+    "build": "bun run validate:i18n && bun run clean && tsc && bun run build:dashboard && bun run copy-static",
+    "copy-static": "bun scripts/copy-static.cjs",
+    "dev": "bun --bun src/index.ts",
+    "start": "bun dist/index.js",
+    "dev:dashboard": "bunx vite --config src/dashboard_frontend/vite.config.ts",
+    "build:dashboard": "bunx vite build --config src/dashboard_frontend/vite.config.ts",
+    "clean": "bunx rimraf dist",
+    "validate:i18n": "bun scripts/validate-i18n.js",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "prepublishOnly": "bun run build"
   },
   "keywords": [
     "mcp",
@@ -46,6 +46,7 @@
     "@fastify/websocket": "^8.2.1",
     "@modelcontextprotocol/sdk": "^0.5.0",
     "@tailwindcss/vite": "^4.1.13",
+    "@types/uuid": "^10.0.0",
     "chokidar": "^3.5.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -63,7 +64,8 @@
     "react-router-dom": "^6.26.2",
     "simple-git": "^3.28.0",
     "tailwind-merge": "^3.3.1",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",

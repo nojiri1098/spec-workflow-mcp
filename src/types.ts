@@ -84,6 +84,34 @@ export interface MCPToolResponse {
   _meta?: Record<string, any>;
 }
 
+// Test Perspective types
+export interface TestPerspective {
+  id: string;
+  title: string;
+  description: string;
+  category: 'functional' | 'non-functional' | 'security' | 'usability';
+  priority: 'high' | 'medium' | 'low';
+  source: string; // 元文書への参照
+  extractedFrom: string; // 抽出元の具体的箇所
+  rationale: string; // なぜこの観点が重要か
+  testConditions: string[]; // 具体的なテスト条件
+  risks: string[]; // 関連するリスク
+}
+
+export interface TestPerspectiveProject {
+  projectName: string;
+  createdAt: string;
+  lastModified: string;
+  perspectives: TestPerspective[];
+  status: 'extracted' | 'under-review' | 'approved' | 'needs-revision';
+}
+
+export interface InputDocument {
+  filePath: string;
+  type: 'requirements' | 'design' | 'api-spec' | 'ui-design' | 'user-story';
+  description: string;
+}
+
 // Helper function to convert ToolResponse to MCP format
 export function toMCPResponse(response: ToolResponse, isError: boolean = false): MCPToolResponse {
   return {

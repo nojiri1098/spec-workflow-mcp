@@ -1,50 +1,50 @@
-# 要件定義書
+# Requirements Document
 
-## はじめに
+## Introduction
 
-[機能の概要、目的、ユーザーにとっての価値を記載してください]
+[Provide a brief overview of the feature, its purpose, and its value to users]
 
-## プロダクトビジョンとの整合性
+## Alignment with Product Vision
 
-[この機能がproduct.mdで概説された目標をどのように支援するかを説明してください]
+[Explain how this feature supports the goals outlined in product.md]
 
-## 機能要件
+## Requirements
 
-### 要件1
+### Requirement 1
 
-**ユーザーストーリー:** [ロール]として、[機能]したいので、[利益/価値]が得られる
+**User Story:** As a [role], I want [feature], so that [benefit]
 
-#### 受け入れ条件
+#### Acceptance Criteria
 
-1. [イベント]が発生した時、システムは[レスポンス]しなければならない
-2. [前提条件]の場合、システムは[レスポンス]しなければならない
-3. [イベント]かつ[条件]の時、システムは[レスポンス]しなければならない
+1. WHEN [event] THEN [system] SHALL [response]
+2. IF [precondition] THEN [system] SHALL [response]
+3. WHEN [event] AND [condition] THEN [system] SHALL [response]
 
-### 要件2
+### Requirement 2
 
-**ユーザーストーリー:** [ロール]として、[機能]したいので、[利益/価値]が得られる
+**User Story:** As a [role], I want [feature], so that [benefit]
 
-#### 受け入れ条件
+#### Acceptance Criteria
 
-1. [イベント]が発生した時、システムは[レスポンス]しなければならない
-2. [前提条件]の場合、システムは[レスポンス]しなければならない
+1. WHEN [event] THEN [system] SHALL [response]
+2. IF [precondition] THEN [system] SHALL [response]
 
-## 非機能要件
+## Non-Functional Requirements
 
-### コードアーキテクチャとモジュール性
-- **単一責任の原則**: 各ファイルは単一の明確に定義された目的を持つべき
-- **モジュラー設計**: コンポーネント、ユーティリティ、サービスは分離され再利用可能であるべき
-- **依存関係管理**: モジュール間の相互依存を最小限に抑える
-- **明確なインターフェース**: コンポーネントとレイヤー間の明確な契約を定義する
+### Code Architecture and Modularity
+- **Single Responsibility Principle**: Each file should have a single, well-defined purpose
+- **Modular Design**: Components, utilities, and services should be isolated and reusable
+- **Dependency Management**: Minimize interdependencies between modules
+- **Clear Interfaces**: Define clean contracts between components and layers
 
-### 性能要件
-- [性能要件を記載]
+### Performance
+- [Performance requirements]
 
-### セキュリティ要件
-- [セキュリティ要件を記載]
+### Security
+- [Security requirements]
 
-### 信頼性要件
-- [信頼性要件を記載]
+### Reliability
+- [Reliability requirements]
 
-### 使いやすさ要件
-- [使いやすさ要件を記載]
+### Usability
+- [Usability requirements]

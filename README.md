@@ -22,7 +22,7 @@ Transform requirements, design documents, and specifications into comprehensive 
 - **✅ Review & Approval System** - Collaborative review process with feedback and revision tracking
 - **📊 Real-Time QA Dashboard** - Monitor test perspective extraction and review progress
 - **🔄 Iterative Refinement** - Continuous improvement of test perspectives based on feedback
-- **🌍 Multi-Language Support** - Available in 11 languages including Japanese
+- **🇯🇵 Japanese Support** - Native Japanese language support for QA workflows
 
 ## 🧪 Current QA Tools
 
@@ -38,9 +38,9 @@ Transform requirements, design documents, and specifications into comprehensive 
 - **UI/UX Testing** - Extract usability and accessibility test considerations
 - **Risk-Based Testing** - Analyze past issues and identify high-risk areas
 
-## 🌍 Supported Languages
+## 🇯🇵 Language Support
 
-🇺🇸 English • 🇯🇵 日本語 • 🇨🇳 中文 • 🇪🇸 Español • 🇧🇷 Português • 🇩🇪 Deutsch • 🇫🇷 Français • 🇷🇺 Русский • 🇮🇹 Italiano • 🇰🇷 한국어 • 🇸🇦 العربية
+**日本語** - QAワークフロー専用の日本語ネイティブサポート
 
 ## 🚀 Quick Start
 
@@ -89,6 +89,20 @@ Extract test perspectives from your project documents:
 - **"Extract test perspectives from requirements.md"** - Analyze requirements for test coverage
 - **"Review test perspectives for user authentication"** - Start collaborative review process
 - **"Show test perspective status"** - Check extraction and review progress
+
+## 📚 Templates and Examples
+
+### Available Templates
+- **Basic Template**: `test-perspectives-template.md` - Structured framework for test perspective documentation
+- **Practical Example**: `test-perspectives-example.md` - Complete example using user authentication feature
+- **Review Checklist**: `review-checklist.md` - Comprehensive checklist for quality review process
+- **Requirements Template**: `requirements-template.md` - Japanese requirements documentation template
+
+### Getting Started Quickly
+1. Use `qa-workflow-guide` tool for comprehensive workflow guidance
+2. Reference `test-perspectives-example.md` to understand practical documentation
+3. Apply `review-checklist.md` for systematic quality assurance
+4. Adapt templates to your specific project needs
 
 ### Example Workflow
 

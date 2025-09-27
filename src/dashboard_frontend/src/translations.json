@@ -1,7 +1,7 @@
 {
   "documentTitle": "{{projectName}} ダッシュボード",
-  "projectNameDefault": "スペックワークフロー",
-  "projectDescription": "開発ワークフローダッシュボード",
+  "projectNameDefault": "QA Workflow MCP",
+  "projectDescription": "品質保証ワークフローダッシュボード",
   "nav": {
     "statistics": "統計",
     "steering": "ステアリング",
@@ -71,9 +71,6 @@
     "header": { "title": "仕様ドキュメント" },
     "tooltips": { "viewRendered": "レンダリング表示", "viewSource": "ソース(Markdown)を表示" },
     "empty": { "docNotCreated": "この {{doc}} ドキュメントはまだ作成されていません。" }
-  },
-  "language": {
-    "select": "言語を選択"
   },
   "common": {
     "viewMode": {

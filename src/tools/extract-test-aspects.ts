@@ -7,31 +7,31 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const extractTestAspectsTool: Tool = {
   name: 'extract_test_aspects',
-  description: `Extract comprehensive test aspects from requirement documents, design specs, and other inputs.
+  description: `要件文書、設計仕様書、その他の入力文書から包括的なテスト観点を抽出します。
 
-# Instructions
-Analyze provided documents and extract comprehensive test aspects covering:
-- Functional testing angles from requirements and features
-- Non-functional requirements (performance, security, usability)
-- Edge cases and error conditions
-- Integration points and dependencies
-- User experience considerations
-- Data validation and boundary testing
-- Security vulnerabilities and access controls
+# 使用方法
+提供された文書を分析し、以下をカバーする包括的なテスト観点を抽出します：
+- 要件と機能からの機能テストの観点
+- 非機能要件（パフォーマンス、セキュリティ、ユーザビリティ）
+- エッジケースとエラー状態
+- 統合ポイントと依存関係
+- ユーザーエクスペリエンスの考慮事項
+- データ検証と境界値テスト
+- セキュリティ脆弱性とアクセス制御
 
-Generate structured test aspects that can guide comprehensive test case design.
+包括的なテストケース設計をガイドできる構造化されたテスト観点を生成します。
 
-IMPORTANT: Only analyze files that exist and are accessible. Generate practical, actionable test aspects.`,
+重要: 存在し、アクセス可能なファイルのみを分析してください。実用的で実行可能なテスト観点を生成します。`,
   inputSchema: {
     type: 'object',
     properties: {
       projectPath: {
         type: 'string',
-        description: 'Absolute path to the project root'
+        description: 'プロジェクトルートへの絶対パス'
       },
       projectName: {
         type: 'string',
-        description: 'Name of the project for test aspect extraction'
+        description: 'テスト観点抽出対象のプロジェクト名'
       },
       inputDocuments: {
         type: 'array',
@@ -40,26 +40,26 @@ IMPORTANT: Only analyze files that exist and are accessible. Generate practical,
           properties: {
             filePath: {
               type: 'string',
-              description: 'Path to document file (relative to project root or absolute)'
+              description: '文書ファイルへのパス（プロジェクトルートからの相対パスまたは絶対パス）'
             },
             type: {
               type: 'string',
               enum: ['requirements', 'design', 'api-spec', 'ui-design', 'user-story'],
-              description: 'Type of document for appropriate analysis approach'
+              description: '適切な分析アプローチのための文書タイプ'
             },
             description: {
               type: 'string',
-              description: 'Brief description of the document content'
+              description: '文書内容の簡潔な説明'
             }
           },
           required: ['filePath', 'type']
         },
-        description: 'List of input documents to analyze for test aspects'
+        description: 'テスト観点分析対象の入力文書リスト'
       },
       focusAreas: {
         type: 'array',
         items: { type: 'string' },
-        description: 'Specific areas to focus on (e.g., "authentication", "data validation", "performance")'
+        description: '重点的に分析する特定の領域（例："認証", "データ検証", "パフォーマンス"）'
       }
     },
     required: ['projectPath', 'projectName', 'inputDocuments']
@@ -240,49 +240,49 @@ async function analyzeDocumentForAspects(
 function extractRequirementsAspects(document: InputDocument, content: string, focusAreas: string[]): TestAspect[] {
   const aspects: TestAspect[] = [];
 
-  // Functional requirements testing
+  // 機能要件テスト
   aspects.push({
     id: uuidv4(),
-    title: 'Functional Requirements Validation',
-    description: 'Verify all functional requirements are implemented correctly according to specifications',
+    title: '機能要件の検証',
+    description: '仕様に従ってすべての機能要件が正しく実装されていることを検証する',
     category: 'functional',
     priority: 'high',
     source: document.filePath,
-    extractedFrom: 'Requirements analysis',
-    rationale: 'Core functionality must work as specified to meet user needs',
+    extractedFrom: '要件分析',
+    rationale: 'ユーザーニーズを満たすために、コア機能は仕様通りに動作する必要がある',
     testConditions: [
-      'Each requirement is testable and verifiable',
-      'Happy path scenarios work correctly',
-      'Requirement dependencies are satisfied',
-      'Business rules are enforced'
+      '各要件がテスト可能で検証可能である',
+      'ハッピーパスシナリオが正しく動作する',
+      '要件の依存関係が満たされている',
+      'ビジネスルールが適用されている'
     ],
     risks: [
-      'Incomplete requirement implementation',
-      'Misinterpretation of requirements',
-      'Missing edge cases in requirements'
+      '要件実装の不完全性',
+      '要件の誤解釈',
+      '要件におけるエッジケースの欠落'
     ]
   });
 
-  // Input validation testing
+  // 入力検証テスト
   aspects.push({
     id: uuidv4(),
-    title: 'Input Validation and Data Integrity',
-    description: 'Test data validation, sanitization, and boundary conditions for all inputs',
+    title: '入力検証とデータ整合性',
+    description: 'すべての入力に対するデータ検証、サニタイゼーション、境界条件のテスト',
     category: 'functional',
     priority: 'high',
     source: document.filePath,
-    extractedFrom: 'Data handling requirements',
-    rationale: 'Invalid input handling is critical for system stability and security',
+    extractedFrom: 'データ処理要件',
+    rationale: '無効な入力の処理は、システムの安定性とセキュリティにとって重要である',
     testConditions: [
-      'Valid input acceptance',
-      'Invalid input rejection with proper error messages',
-      'Boundary value testing (min/max values)',
-      'Special character and injection attempt handling'
+      '有効な入力の受け入れ',
+      '適切なエラーメッセージを伴う無効な入力の拒否',
+      '境界値テスト（最小値/最大値）',
+      '特殊文字とインジェクション攻撃の処理'
     ],
     risks: [
-      'Data corruption from invalid inputs',
-      'Security vulnerabilities from injection attacks',
-      'System crashes from unexpected input'
+      '無効な入力によるデータ破損',
+      'インジェクション攻撃によるセキュリティ脆弱性',
+      '予期しない入力によるシステムクラッシュ'
     ]
   });
 
@@ -458,49 +458,49 @@ function generateCrossCuttingAspects(
 ): TestAspect[] {
   const aspects: TestAspect[] = [];
 
-  // Error handling and recovery
+  // エラーハンドリングと復旧
   aspects.push({
     id: uuidv4(),
-    title: 'Error Handling and System Recovery',
-    description: 'Test system behavior under error conditions and recovery mechanisms',
+    title: 'エラーハンドリングとシステム復旧',
+    description: 'エラー状態でのシステム動作と復旧メカニズムのテスト',
     category: 'non-functional',
     priority: 'high',
-    source: 'Cross-cutting analysis',
-    extractedFrom: 'System-wide error handling requirements',
-    rationale: 'Robust error handling is essential for system reliability and user trust',
+    source: '横断的分析',
+    extractedFrom: 'システム全体のエラーハンドリング要件',
+    rationale: '堅牢なエラーハンドリングは、システムの信頼性とユーザーの信頼にとって不可欠である',
     testConditions: [
-      'Graceful error handling and user messaging',
-      'System recovery from failures',
-      'Data consistency during errors',
-      'Logging and monitoring of errors'
+      '適切なエラーハンドリングとユーザーメッセージ',
+      '障害からのシステム復旧',
+      'エラー時のデータ整合性',
+      'エラーのログ記録と監視'
     ],
     risks: [
-      'System crashes from unhandled errors',
-      'Data loss during failure scenarios',
-      'Poor user experience with unclear error messages'
+      '未処理エラーによるシステムクラッシュ',
+      '障害シナリオでのデータ損失',
+      '不明確なエラーメッセージによる悪いユーザー体験'
     ]
   });
 
-  // Security considerations
+  // セキュリティ考慮事項
   aspects.push({
     id: uuidv4(),
-    title: 'Security and Data Protection',
-    description: 'Comprehensive security testing across all system components',
+    title: 'セキュリティとデータ保護',
+    description: 'すべてのシステムコンポーネントを対象とした包括的なセキュリティテスト',
     category: 'security',
     priority: 'high',
-    source: 'Cross-cutting analysis',
-    extractedFrom: 'Security requirements and best practices',
-    rationale: 'Security vulnerabilities can compromise entire system and user data',
+    source: '横断的分析',
+    extractedFrom: 'セキュリティ要件とベストプラクティス',
+    rationale: 'セキュリティ脆弱性はシステム全体とユーザーデータを危険にさらす可能性がある',
     testConditions: [
-      'Authentication and session management',
-      'Data encryption and secure transmission',
-      'Access control and privilege escalation prevention',
-      'Input validation and injection attack prevention'
+      '認証とセッション管理',
+      'データ暗号化と安全な通信',
+      'アクセス制御と権限昇格の防止',
+      '入力検証とインジェクション攻撃の防止'
     ],
     risks: [
-      'Data breaches and unauthorized access',
-      'System compromise through vulnerabilities',
-      'Compliance violations and legal issues'
+      'データ侵害と不正アクセス',
+      '脆弱性を通じたシステム侵害',
+      'コンプライアンス違反と法的問題'
     ]
   });
 
@@ -512,54 +512,57 @@ function generateMarkdownReport(
   documentContents: { document: InputDocument; content: string }[],
   missingFiles: string[]
 ): string {
-  const markdown = `# Test Aspects: ${project.projectName}
+  const markdown = `# ${project.projectName} - テスト観点
 
-## Extraction Summary
-- **Project**: ${project.projectName}
-- **Extraction Date**: ${new Date(project.createdAt).toLocaleDateString()}
-- **Status**: ${project.status}
-- **Total Aspects**: ${project.aspects.length}
-- **Processed Documents**: ${documentContents.length}
-${missingFiles.length > 0 ? `- **Skipped Documents**: ${missingFiles.length}` : ''}
+## 抽出サマリー
+- **プロジェクト**: ${project.projectName}
+- **抽出日**: ${new Date(project.createdAt).toLocaleDateString('ja-JP')}
+- **ステータス**: ${project.status}
+- **総テスト観点数**: ${project.aspects.length}
+- **処理済み文書数**: ${documentContents.length}
+${missingFiles.length > 0 ? `- **スキップした文書数**: ${missingFiles.length}` : ''}
 
-## Source Documents
+## 参照元文書
 ${documentContents.map(doc => `- **${doc.document.type}**: ${doc.document.filePath}${doc.document.description ? ` - ${doc.document.description}` : ''}`).join('\n')}
 
-${missingFiles.length > 0 ? `## Skipped Documents
+${missingFiles.length > 0 ? `## スキップした文書
 ${missingFiles.map(file => `- ${file}`).join('\n')}
 
-` : ''}## Extracted Test Aspects
+` : ''}## 抽出されたテスト観点
 
-${project.aspects.map((aspect, index) => `### ${aspect.category.toUpperCase()}-${String(index + 1).padStart(3, '0')}: ${aspect.title}
+${project.aspects.map((aspect, index) => `### TEP-${String(index + 1).padStart(3, '0')}: ${aspect.title}
 
-- **Category**: ${aspect.category.charAt(0).toUpperCase() + aspect.category.slice(1)}
-- **Priority**: ${aspect.priority.charAt(0).toUpperCase() + aspect.priority.slice(1)}
-- **Source**: ${aspect.source}
-- **Extracted From**: ${aspect.extractedFrom}
+#### 基本情報
+- **カテゴリー**: ${aspect.category === 'functional' ? '機能' : aspect.category === 'non-functional' ? '非機能' : aspect.category === 'security' ? 'セキュリティ' : aspect.category === 'usability' ? 'ユーザビリティ' : aspect.category}
+- **優先度**: ${aspect.priority === 'high' ? '高' : aspect.priority === 'medium' ? '中' : aspect.priority === 'low' ? '低' : aspect.priority}
+- **参照元**: ${aspect.source}
+- **抽出根拠**: ${aspect.extractedFrom}
 
-**Description**: ${aspect.description}
+#### 説明
+${aspect.description}
 
-**Rationale**: ${aspect.rationale}
+#### 理由・背景
+${aspect.rationale}
 
-**Test Conditions**:
+#### テスト条件
 ${aspect.testConditions.map(condition => `- ${condition}`).join('\n')}
 
-**Associated Risks**:
+#### 関連リスク
 ${aspect.risks.map(risk => `- ${risk}`).join('\n')}
 
 ---
 `).join('\n')}
 
-## Next Steps
+## 次のステップ
 
-1. **Review** each test aspect for completeness and accuracy
-2. **Request approval** via dashboard or use: \`approvals action:"request" category:"test-aspect"\`
-3. **Refine** aspects based on review feedback
-4. **Proceed** to test case design once approved
+1. **レビュー**: 各テスト観点の完全性と正確性を確認
+2. **承認要求**: ダッシュボード経由、または次のコマンドを使用: \`approvals action:"request" category:"test-aspect"\`
+3. **改善**: レビューフィードバックに基づく観点の改善
+4. **次段階**: 承認後、テストケース設計に進む
 
 ---
 
-*Generated by extract_test_aspects tool at ${new Date().toISOString()}*
+*extract_test_aspects ツールにより ${new Date().toISOString()} に生成*
 `;
 
   return markdown;

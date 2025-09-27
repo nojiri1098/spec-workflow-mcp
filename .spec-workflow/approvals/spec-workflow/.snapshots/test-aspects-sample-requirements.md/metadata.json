@@ -1,0 +1,14 @@
+{
+  "filePath": "docs/test-aspects-sample-requirements.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-09-27T10:08:45.882Z",
+      "trigger": "initial",
+      "approvalId": "approval_1758967725878_3xqyfkezn",
+      "approvalTitle": "spec-workflow テスト観点レビュー"
+    }
+  ]
+}

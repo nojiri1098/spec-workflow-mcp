@@ -97,9 +97,9 @@ flowchart TD
    - 要件文書、設計文書、API仕様書などの入力文書を確認
    - 文書タイプを適切に分類（requirements, design, api-spec, ui-design, user-story）
 
-2. **テスト観点の抽出**
+2. **テスト観点の作成**
    \`\`\`
-   extract_test_aspects
+   create_test_aspects
    projectPath: "/path/to/project"
    projectName: "project-name"
    inputDocuments: [

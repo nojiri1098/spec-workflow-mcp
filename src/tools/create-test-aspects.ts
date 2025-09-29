@@ -5,12 +5,12 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-export const extractTestAspectsTool: Tool = {
-  name: 'extract_test_aspects',
-  description: `要件文書、設計仕様書、その他の入力文書から包括的なテスト観点を抽出します。
+export const createTestAspectsTool: Tool = {
+  name: 'create_test_aspects',
+  description: `要件文書、設計仕様書、その他の入力文書から包括的なテスト観点を作成します。
 
 # 使用方法
-提供された文書を分析し、以下をカバーする包括的なテスト観点を抽出します：
+提供された文書を分析し、以下をカバーする包括的なテスト観点を作成します：
 - 要件と機能からの機能テストの観点
 - 非機能要件（パフォーマンス、セキュリティ、ユーザビリティ）
 - エッジケースとエラー状態
@@ -31,7 +31,7 @@ export const extractTestAspectsTool: Tool = {
       },
       projectName: {
         type: 'string',
-        description: 'テスト観点抽出対象のプロジェクト名'
+        description: 'テスト観点作成対象のプロジェクト名'
       },
       inputDocuments: {
         type: 'array',
@@ -66,7 +66,7 @@ export const extractTestAspectsTool: Tool = {
   }
 };
 
-export async function extractTestAspectsHandler(
+export async function createTestAspectsHandler(
   args: {
     projectPath: string;
     projectName: string;
@@ -147,7 +147,7 @@ export async function extractTestAspectsHandler(
 
     return {
       success: true,
-      message: `Successfully extracted ${aspects.length} test aspects for ${args.projectName}`,
+      message: `Successfully created ${aspects.length} test aspects for ${args.projectName}`,
       data: {
         projectName: args.projectName,
         aspectsCount: aspects.length,
@@ -162,7 +162,7 @@ export async function extractTestAspectsHandler(
         }))
       },
       nextSteps: [
-        `Review extracted aspects: ${outputPath.replace(validatedProjectPath, '.')}`,
+        `Review created aspects: ${outputPath.replace(validatedProjectPath, '.')}`,
         'Request approval for review: approvals action:"request" category:"test-aspect"',
         `Use dashboard to review detailed aspects: ${context.dashboardUrl || 'Start dashboard or use VS Code extension'}`,
         ...(missingFiles.length > 0 ? [`Note: ${missingFiles.length} files were skipped: ${missingFiles.join(', ')}`] : [])
@@ -178,7 +178,7 @@ export async function extractTestAspectsHandler(
     const errorMessage = error instanceof Error ? error.message : String(error);
     return {
       success: false,
-      message: `Failed to extract test aspects: ${errorMessage}`,
+      message: `Failed to create test aspects: ${errorMessage}`,
       nextSteps: [
         'Check project path exists',
         'Verify document file paths',
@@ -514,9 +514,9 @@ function generateMarkdownReport(
 ): string {
   const markdown = `# ${project.projectName} - テスト観点
 
-## 抽出サマリー
+## 作成サマリー
 - **プロジェクト**: ${project.projectName}
-- **抽出日**: ${new Date(project.createdAt).toLocaleDateString('ja-JP')}
+- **作成日**: ${new Date(project.createdAt).toLocaleDateString('ja-JP')}
 - **ステータス**: ${project.status}
 - **総テスト観点数**: ${project.aspects.length}
 - **処理済み文書数**: ${documentContents.length}
@@ -528,7 +528,7 @@ ${documentContents.map(doc => `- **${doc.document.type}**: ${doc.document.filePa
 ${missingFiles.length > 0 ? `## スキップした文書
 ${missingFiles.map(file => `- ${file}`).join('\n')}
 
-` : ''}## 抽出されたテスト観点
+` : ''}## 作成されたテスト観点
 
 ${project.aspects.map((aspect, index) => `### TEP-${String(index + 1).padStart(3, '0')}: ${aspect.title}
 
@@ -536,7 +536,7 @@ ${project.aspects.map((aspect, index) => `### TEP-${String(index + 1).padStart(3
 - **カテゴリー**: ${aspect.category === 'functional' ? '機能' : aspect.category === 'non-functional' ? '非機能' : aspect.category === 'security' ? 'セキュリティ' : aspect.category === 'usability' ? 'ユーザビリティ' : aspect.category}
 - **優先度**: ${aspect.priority === 'high' ? '高' : aspect.priority === 'medium' ? '中' : aspect.priority === 'low' ? '低' : aspect.priority}
 - **参照元**: ${aspect.source}
-- **抽出根拠**: ${aspect.extractedFrom}
+- **作成根拠**: ${aspect.extractedFrom}
 
 #### 説明
 ${aspect.description}
@@ -562,7 +562,7 @@ ${aspect.risks.map(risk => `- ${risk}`).join('\n')}
 
 ---
 
-*extract_test_aspects ツールにより ${new Date().toISOString()} に生成*
+*create_test_aspects ツールにより ${new Date().toISOString()} に生成*
 `;
 
   return markdown;

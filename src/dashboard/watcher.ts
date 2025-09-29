@@ -66,7 +66,7 @@ export class SpecWatcher extends EventEmitter {
       }
       
       // Determine if this is a spec or steering change
-      if (normalizedPath.includes('/specs/')) {
+      if (normalizedPath.includes('/test-aspects/')) {
         await this.handleSpecChange(action, normalizedPath);
       } else if (normalizedPath.includes('/steering/')) {
         await this.handleSteeringChange(action, normalizedPath);
@@ -77,9 +77,9 @@ export class SpecWatcher extends EventEmitter {
   }
 
   private async handleSpecChange(action: 'created' | 'updated' | 'deleted', filePath: string): Promise<void> {
-    // Extract spec name from path like: /path/to/.spec-workflow/specs/user-auth/requirements.md
+    // Extract spec name from path like: /path/to/.spec-workflow/test-aspects/user-auth/test-aspects.md
     const pathParts = filePath.split('/');
-    const specsIndex = pathParts.findIndex(part => part === 'specs');
+    const specsIndex = pathParts.findIndex(part => part === 'test-aspects');
     
     if (specsIndex === -1 || specsIndex + 1 >= pathParts.length) return;
     

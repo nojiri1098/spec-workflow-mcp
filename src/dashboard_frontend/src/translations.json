@@ -3,7 +3,6 @@
   "projectNameDefault": "QA Workflow MCP",
   "projectDescription": "品質保証ワークフローダッシュボード",
   "nav": {
-    "statistics": "統計",
     "steering": "事前知識",
     "testAspects": "テスト観点",
     "tasks": "タスク",
@@ -23,23 +22,6 @@
     "closeMenu": "メニューを閉じる",
     "notificationVolume": "通知音量",
     "theme": "テーマ"
-  },
-  "stats": {
-    "specifications": {
-      "title": "仕様書",
-      "label": "アクティブな仕様書"
-    },
-    "taskProgress": {
-      "title": "タスク進捗",
-      "summary_one": "{{specs}}個の仕様書にわたる{{count}}個のタスク",
-      "summary_other": "{{specs}}個の仕様書にわたる{{count}}個のタスク",
-      "noActiveSpecs": "アクティブな仕様書がありません"
-    },
-    "approvals": {
-      "title": "承認",
-      "awaiting": "レビュー待ち",
-      "allClear": "すべてクリア"
-    }
   },
   "editor": {
     "markdown": {
@@ -190,9 +172,7 @@
     "modal": {
       "archivedBadge": "アーカイブ",
       "archivedNotice": "アーカイブされたテスト観点（編集可能）",
-      "closeAria": "テスト観点ビューアを閉じる",
-      "docLabel": "ドキュメント:",
-      "docSelectAria": "ドキュメント種類を選択"
+      "closeAria": "テスト観点ビューアを閉じる"
     },
     "documents": {
       "testAspects": "テスト観点書"

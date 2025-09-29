@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "qa-workflow": {
+      "command": "node",
+      "args": [
+        "/Users/daiki.nojiri/ghq/github.com/nojiri1098/spec-workflow-mcp/dist/index.js"
+      ]
+    }
+  }
+}

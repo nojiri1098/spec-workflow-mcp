@@ -36,15 +36,15 @@ export class PathUtils {
   }
 
   static getSpecPath(projectPath: string, specName: string): string {
-    return this.safeJoin(projectPath, '.spec-workflow', 'specs', specName);
+    return this.safeJoin(projectPath, '.spec-workflow', 'test-aspects', specName);
   }
 
   static getArchiveSpecPath(projectPath: string, specName: string): string {
-    return this.safeJoin(projectPath, '.spec-workflow', 'archive', 'specs', specName);
+    return this.safeJoin(projectPath, '.spec-workflow', 'archive', 'test-aspects', specName);
   }
 
   static getArchiveSpecsPath(projectPath: string): string {
-    return this.safeJoin(projectPath, '.spec-workflow', 'archive', 'specs');
+    return this.safeJoin(projectPath, '.spec-workflow', 'archive', 'test-aspects');
   }
 
   static getSteeringPath(projectPath: string): string {

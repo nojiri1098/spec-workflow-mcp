@@ -338,6 +338,13 @@ export class DashboardServer {
       return spec;
     });
 
+    // Helper function to map API document names to actual file names
+    const getDocumentFileName = (document: string): string => {
+      const fileNameMap: Record<string, string> = {
+        'testAspects': 'test-aspects'
+      };
+      return fileNameMap[document] || document;
+    };
 
     // Get raw markdown content for specs
     this.app.get('/api/specs/:name/:document', async (request, reply) => {
@@ -349,7 +356,8 @@ export class DashboardServer {
         return;
       }
 
-      const docPath = join(this.options.projectPath, '.spec-workflow', 'specs', name, `${document}.md`);
+      const fileName = getDocumentFileName(document);
+      const docPath = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name, `${fileName}.md`);
 
       try {
         const content = await readFile(docPath, 'utf-8');
@@ -375,11 +383,12 @@ export class DashboardServer {
         return;
       }
 
-      const docPath = join(this.options.projectPath, '.spec-workflow', 'specs', name, `${document}.md`);
+      const fileName = getDocumentFileName(document);
+      const docPath = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name, `${fileName}.md`);
 
       try {
         // Ensure the spec directory exists
-        const specDir = join(this.options.projectPath, '.spec-workflow', 'specs', name);
+        const specDir = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name);
         await fs.mkdir(specDir, { recursive: true });
 
         // Write the content to file
@@ -407,11 +416,12 @@ export class DashboardServer {
         return;
       }
 
-      const docPath = join(this.options.projectPath, '.spec-workflow', 'archive', 'specs', name, `${document}.md`);
+      const fileName = getDocumentFileName(document);
+      const docPath = join(this.options.projectPath, '.spec-workflow', 'archive', 'test-aspects', name, `${fileName}.md`);
 
       try {
         // Ensure the archived spec directory exists
-        const specDir = join(this.options.projectPath, '.spec-workflow', 'archive', 'specs', name);
+        const specDir = join(this.options.projectPath, '.spec-workflow', 'archive', 'test-aspects', name);
         await fs.mkdir(specDir, { recursive: true });
 
         // Write the content to file
@@ -426,12 +436,13 @@ export class DashboardServer {
     // Get all spec documents for real-time viewing
     this.app.get('/api/specs/:name/all', async (request, reply) => {
       const { name } = request.params as { name: string };
-      const specDir = join(this.options.projectPath, '.spec-workflow', 'specs', name);
+      const specDir = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name);
       const documents = ['testAspects'];
       const result: Record<string, { content: string; lastModified: string } | null> = {};
 
       for (const doc of documents) {
-        const docPath = join(specDir, `${doc}.md`);
+        const fileName = getDocumentFileName(doc);
+        const docPath = join(specDir, `${fileName}.md`);
         try {
           const content = await readFile(docPath, 'utf-8');
           const stats = await fs.stat(docPath);
@@ -450,12 +461,13 @@ export class DashboardServer {
     // Get all archived spec documents for read-only viewing
     this.app.get('/api/specs/:name/all/archived', async (request, reply) => {
       const { name } = request.params as { name: string };
-      const specDir = join(this.options.projectPath, '.spec-workflow', 'archive', 'specs', name);
+      const specDir = join(this.options.projectPath, '.spec-workflow', 'archive', 'test-aspects', name);
       const documents = ['testAspects'];
       const result: Record<string, { content: string; lastModified: string } | null> = {};
 
       for (const doc of documents) {
-        const docPath = join(specDir, `${doc}.md`);
+        const fileName = getDocumentFileName(doc);
+        const docPath = join(specDir, `${fileName}.md`);
         try {
           const content = await readFile(docPath, 'utf-8');
           const stats = await fs.stat(docPath);
@@ -545,7 +557,7 @@ export class DashboardServer {
         }
 
         // Parse tasks.md file for detailed task information
-        const tasksPath = join(this.options.projectPath, '.spec-workflow', 'specs', name, 'tasks.md');
+        const tasksPath = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name, 'tasks.md');
         const tasksContent = await readFile(tasksPath, 'utf-8');
         const parseResult = parseTasksFromMarkdown(tasksContent);
 
@@ -577,7 +589,7 @@ export class DashboardServer {
       }
 
       try {
-        const tasksPath = join(this.options.projectPath, '.spec-workflow', 'specs', name, 'tasks.md');
+        const tasksPath = join(this.options.projectPath, '.spec-workflow', 'test-aspects', name, 'tasks.md');
 
         // Check if tasks file exists
         let tasksContent: string;
@@ -825,7 +837,7 @@ export class DashboardServer {
   private async broadcastTaskUpdate(specName: string) {
     try {
       // Get updated task progress for the specific spec
-      const tasksPath = join(this.options.projectPath, '.spec-workflow', 'specs', specName, 'tasks.md');
+      const tasksPath = join(this.options.projectPath, '.spec-workflow', 'test-aspects', specName, 'tasks.md');
       const tasksContent = await readFile(tasksPath, 'utf-8');
       const parseResult = parseTasksFromMarkdown(tasksContent);
 

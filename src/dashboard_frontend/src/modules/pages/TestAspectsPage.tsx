@@ -35,7 +35,7 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
   // Load all documents when modal opens
   useEffect(() => {
     if (!isOpen || !spec) {
-      setAllDocuments({});
+      setDocument(null);
       setContent('');
       return;
     }
@@ -148,7 +148,8 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
       );
     }
 
-    if (!content) {
+    // Don't show "no content" message in editor mode
+    if (!content && viewMode !== 'editor') {
       return (
         <div className="text-center py-12 text-gray-500 dark:text-gray-400">
           {t('common.noContentAvailable')}

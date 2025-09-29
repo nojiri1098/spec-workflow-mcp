@@ -253,12 +253,33 @@ bun install
 # Build the project
 bun run build
 
+# Build dashboard for production
+npm run build:dashboard
+
 # Run in development mode
 bun run dev
 
 # Run with dashboard
 bun run dev . --dashboard
 ```
+
+### Dashboard Build Process
+
+The dashboard frontend is built from `src/dashboard_frontend/` and needs to be copied to the correct locations:
+
+```bash
+# Build output location
+src/dashboard_frontend/dist/  # Vite build output
+
+# Required locations for the server
+src/dashboard/public/         # Development mode
+dist/dashboard/public/        # Production mode
+```
+
+The build script automatically handles copying to both locations. If you encounter issues with outdated UI:
+1. Clear the old build: `rm -rf src/dashboard/public dist/dashboard/public`
+2. Rebuild: `npm run build:dashboard`
+3. The script will copy the fresh build to both locations
 
 ## 🎯 QA Workflow Benefits
 

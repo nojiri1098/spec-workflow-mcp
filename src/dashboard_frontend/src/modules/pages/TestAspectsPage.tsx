@@ -20,7 +20,6 @@ function formatDate(dateStr?: string, t?: (k: string, o?: any) => string) {
 function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: boolean; onClose: () => void; isArchived?: boolean }) {
   const { getAllSpecDocuments, getAllArchivedSpecDocuments, saveSpecDocument, saveArchivedSpecDocument } = useApi();
   const { t } = useTranslation();
-  const [selectedDoc, setSelectedDoc] = useState<string>('requirements');
   const [viewMode, setViewMode] = useState<'rendered' | 'source' | 'editor'>('rendered');
   const [content, setContent] = useState<string>('');
   const [editContent, setEditContent] = useState<string>('');
@@ -28,20 +27,10 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
   const [saving, setSaving] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<string>('');
-  const [allDocuments, setAllDocuments] = useState<Record<string, { content: string; lastModified: string } | null>>({});
+  const [document, setDocument] = useState<{ content: string; lastModified: string } | null>(null);
   const [confirmCloseModalOpen, setConfirmCloseModalOpen] = useState<boolean>(false);
 
-  const phases = spec?.phases || {};
-  const availableDocs = ['requirements', 'design', 'tasks'].filter(doc => 
-    phases[doc] && phases[doc].exists
-  );
-
-  // Set default document to first available
-  useEffect(() => {
-    if (availableDocs.length > 0 && !availableDocs.includes(selectedDoc)) {
-      setSelectedDoc(availableDocs[0]);
-    }
-  }, [availableDocs, selectedDoc]);
+  // Single document mode - no need for document selection logic
 
   // Load all documents when modal opens
   useEffect(() => {
@@ -59,12 +48,14 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
     getDocuments(spec.name)
       .then((docs) => {
         if (active) {
-          setAllDocuments(docs);
+          // Get the test aspects document (assuming it's 'testAspects' or fallback to 'requirements')
+          const testAspectsDoc = docs.testAspects || docs.requirements || null;
+          setDocument(testAspectsDoc);
         }
       })
       .catch(() => {
         if (active) {
-          setAllDocuments({});
+          setDocument(null);
         }
       })
       .finally(() => {
@@ -76,10 +67,10 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
     return () => { active = false; };
   }, [isOpen, spec, isArchived, getAllSpecDocuments, getAllArchivedSpecDocuments]);
 
-  // Update content when selected document changes (but not during saves)
+  // Update content when document changes (but not during saves)
   useEffect(() => {
-    if (selectedDoc && allDocuments[selectedDoc]) {
-      const docContent = allDocuments[selectedDoc]?.content || '';
+    if (document) {
+      const docContent = document.content || '';
       setContent(docContent);
       // Only reset edit content if we're not currently saving
       // This prevents the auto-save from resetting the editor
@@ -90,32 +81,28 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
       setContent('');
       setEditContent('');
     }
-    // Reset editor state when switching documents
+    // Reset editor state when document changes
     setSaved(false);
     setSaveError('');
-  }, [selectedDoc, allDocuments, saving]);
+  }, [document, saving]);
 
   // Save function for editor
   const handleSave = useCallback(async () => {
-    if (!spec || !selectedDoc || !editContent) return;
+    if (!spec || !editContent) return;
     
     setSaving(true);
     setSaveError('');
     
     try {
       const saveFunction = isArchived ? saveArchivedSpecDocument : saveSpecDocument;
-      const result = await saveFunction(spec.name, selectedDoc, editContent);
+      const result = await saveFunction(spec.name, 'testAspects', editContent);
       if (result.ok) {
         setSaved(true);
-        // Update the documents state to reflect the save
-        setAllDocuments(prev => ({
-          ...prev,
-          [selectedDoc]: {
-            ...prev[selectedDoc]!,
-            content: editContent,
-            lastModified: new Date().toISOString()
-          }
-        }));
+        // Update the document state to reflect the save
+        setDocument({
+          content: editContent,
+          lastModified: new Date().toISOString()
+        });
         // Update content state to match what was saved
         setContent(editContent);
         // Clear saved status after a delay
@@ -128,7 +115,7 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
     } finally {
       setSaving(false);
     }
-  }, [spec, selectedDoc, editContent, isArchived, saveSpecDocument, saveArchivedSpecDocument]);
+  }, [spec, editContent, isArchived, saveSpecDocument, saveArchivedSpecDocument]);
 
   // Check for unsaved changes before closing
   const handleClose = useCallback(() => {
@@ -237,21 +224,11 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
 
         {/* Controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-3 sm:p-4 md:p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 gap-3 sm:gap-4 md:gap-6">
-          {/* Document Switcher */}
+          {/* Document Title */}
           <div className="flex items-center gap-2 flex-1">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">{t('testAspectsPage.modal.docLabel')}</label>
-            <select
-              value={selectedDoc}
-              onChange={(e) => setSelectedDoc(e.target.value)}
-              className="flex-1 sm:flex-none px-3 py-1.5 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              aria-label={t('testAspectsPage.modal.docSelectAria')}
-            >
-              {availableDocs.map(doc => (
-                <option key={doc} value={doc}>
-                  {t(`testAspectsPage.documents.${doc}`)}
-                </option>
-              ))}
-            </select>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+              {t('testAspectsPage.documents.testAspects')}
+            </h3>
           </div>
 
           {/* View Mode Switcher */}
@@ -301,17 +278,7 @@ function SpecModal({ spec, isOpen, onClose, isArchived }: { spec: any; isOpen: b
 
         {/* Content */}
         <div className={`${viewMode === 'editor' ? 'flex-1 overflow-hidden' : 'p-3 sm:p-6 md:p-8 overflow-auto min-h-0'}`}>
-          {availableDocs.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="text-lg font-medium">{t('testAspectsPage.empty.title')}</p>
-              <p className="text-sm">{t('testAspectsPage.empty.description')}</p>
-            </div>
-          ) : (
-            renderContent()
-          )}
+          {renderContent()}
         </div>
       </div>
 

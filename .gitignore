@@ -91,6 +91,10 @@ out
 .nuxt
 dist
 
+# Frontend build output
+src/dashboard_frontend/dist
+src/dashboard/public
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js

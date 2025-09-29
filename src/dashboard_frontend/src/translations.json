@@ -195,10 +195,7 @@
       "docSelectAria": "ドキュメント種類を選択"
     },
     "documents": {
-      "requirements": "要件定義",
-      "design": "設計書",
-      "tasks": "タスク一覧",
-      "testAspects": "テスト観点"
+      "testAspects": "テスト観点書"
     },
     "table": {
       "name": "名前",

@@ -342,7 +342,7 @@ export class DashboardServer {
     // Get raw markdown content for specs
     this.app.get('/api/specs/:name/:document', async (request, reply) => {
       const { name, document } = request.params as { name: string; document: string };
-      const allowedDocs = ['requirements', 'design', 'tasks'];
+      const allowedDocs = ['testAspects'];
 
       if (!allowedDocs.includes(document)) {
         reply.code(400).send({ error: 'Invalid document type' });
@@ -363,7 +363,7 @@ export class DashboardServer {
     this.app.put('/api/specs/:name/:document', async (request, reply) => {
       const { name, document } = request.params as { name: string; document: string };
       const { content } = request.body as { content: string };
-      const allowedDocs = ['requirements', 'design', 'tasks'];
+      const allowedDocs = ['testAspects'];
 
       if (!allowedDocs.includes(document)) {
         reply.code(400).send({ error: 'Invalid document type' });
@@ -395,7 +395,7 @@ export class DashboardServer {
     this.app.put('/api/specs/:name/:document/archived', async (request, reply) => {
       const { name, document } = request.params as { name: string; document: string };
       const { content } = request.body as { content: string };
-      const allowedDocs = ['requirements', 'design', 'tasks'];
+      const allowedDocs = ['testAspects'];
 
       if (!allowedDocs.includes(document)) {
         reply.code(400).send({ error: 'Invalid document type' });
@@ -427,7 +427,7 @@ export class DashboardServer {
     this.app.get('/api/specs/:name/all', async (request, reply) => {
       const { name } = request.params as { name: string };
       const specDir = join(this.options.projectPath, '.spec-workflow', 'specs', name);
-      const documents = ['requirements', 'design', 'tasks'];
+      const documents = ['testAspects'];
       const result: Record<string, { content: string; lastModified: string } | null> = {};
 
       for (const doc of documents) {
@@ -451,7 +451,7 @@ export class DashboardServer {
     this.app.get('/api/specs/:name/all/archived', async (request, reply) => {
       const { name } = request.params as { name: string };
       const specDir = join(this.options.projectPath, '.spec-workflow', 'archive', 'specs', name);
-      const documents = ['requirements', 'design', 'tasks'];
+      const documents = ['testAspects'];
       const result: Record<string, { content: string; lastModified: string } | null> = {};
 
       for (const doc of documents) {
